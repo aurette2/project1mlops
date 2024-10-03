@@ -13,7 +13,7 @@ COPY /requirements.txt .
 # Install the required Python packages
 RUN pip install --upgrade -r requirements.txt
 
-COPY .env .
+# COPY .env .
 
 # Copy the entire project directory into the container
 COPY . .
@@ -26,7 +26,7 @@ COPY . .
 # RUN dvc pull
 
 # Set the environment variable for the data path
-# ENV DATA_FOR_DRIFT_PATH="./data/"
+ENV DATA_FOR_DRIFT_PATH="./data/"
 
 # Expose the ports for FastAPI (8000) and Streamlit (8501)
 EXPOSE 8000
@@ -46,4 +46,5 @@ ENV SECRET_KEY=$SECRET_KEY
 RUN ls -la >> build.log
 
 # CMD /bin/bash -c "fastapi run controller.py --host 0.0.0.0 --port 8000 & sleep 5 && streamlit run test.py --server.address 0.0.0.0 --server.port 8501"
-CMD /bin/bash -c "uvicorn controller:app --host 0.0.0.0 --port 8000 & sleep 5 && streamlit run test.py --server.address 0.0.0.0 --server.port 8501"
+# CMD /bin/sh -c "uvicorn controller:app --host 0.0.0.0 --port 8000 & sleep 5 && streamlit run app.py --server.address 0.0.0.0 --server.port 8501"
+CMD ["sh", "-c", "uvicorn controller:app --host 0.0.0.0 --port 8000 & sleep 5 && streamlit run app.py --server.address 0.0.0.0 --server.port 8501"]
